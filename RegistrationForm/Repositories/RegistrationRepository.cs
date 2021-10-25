@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RegistrationForm.Data;
 using RegistrationForm.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RegistrationForm.Repositories
@@ -19,11 +17,18 @@ namespace RegistrationForm.Repositories
 
         public async Task<List<Question>> GetAsync()
         {
-
-
             return await _context.Questions.Include(p => p.Answers).ToListAsync();
-            // return await _context.Registrations.Include(r => r.Question).ThenInclude(q => q.Answers).FirstOrDefaultAsync(d => d.RegId == 1);
+        }
 
+        public async Task<Question> GetByIdAsync(int id)
+        {
+            return await _context.Questions.Include(pa => pa.Answers).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task UpdateAsync(Question question)
+        {
+            _context.Questions.Update(question);
+            await _context.SaveChangesAsync();
         }
     }
 }
